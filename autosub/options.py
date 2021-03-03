@@ -7,9 +7,12 @@ Defines autosub's command line options.
 from __future__ import absolute_import, print_function, unicode_literals
 import argparse
 import gettext
+import sys
 
 # Import third-party modules
 from googletrans import constants as gt_constants
+from gooey import Gooey, GooeyParser
+from gooey.python_bindings.gooey_decorator import IGNORE_COMMAND
 
 # Any changes to the path and your own modules
 from autosub import metadata
@@ -29,12 +32,18 @@ _ = OPTIONS_TEXT.gettext
 M_ = META_TEXT.gettext
 
 
+@Gooey(
+    program_name=f'{metadata.NAME} {metadata.VERSION}',
+    tabbed_groups=True,
+)
 def get_cmd_parser():  # pylint: disable=too-many-statements
     """
     Get command-line parser.
     """
 
-    parser = argparse.ArgumentParser(
+    cli_mode = IGNORE_COMMAND in sys.argv
+
+    parser = GooeyParser(
         prog=metadata.NAME,
         usage=_('\n  %(prog)s [-i path] [options]'),
         description=M_(metadata.DESCRIPTION),
@@ -91,7 +100,8 @@ def get_cmd_parser():  # pylint: disable=too-many-statements
 
     input_group.add_argument(
         '-i', '--input',
-        metavar=_('path'),
+        widget='FileChooser',
+        metavar=_('Video/Audio/Subtitles Path'),
         help=_("The path to the video/audio/subtitles file "
                "that needs to generate subtitles. "
                "When it is a subtitles file, "
@@ -100,7 +110,8 @@ def get_cmd_parser():  # pylint: disable=too-many-statements
 
     input_group.add_argument(
         '-er', '--ext-regions',
-        metavar=_('path'),
+        widget='FileChooser',
+        metavar=_('External Speech Regions'),
         help=_("Path to the subtitles file "
                "which provides external speech regions, "
                "which is one of the formats that pysubs2 supports "
@@ -109,7 +120,7 @@ def get_cmd_parser():  # pylint: disable=too-many-statements
 
     input_group.add_argument(
         '-sty', '--styles',
-        nargs='?', metavar=_('path'),
+        nargs='?', metavar=_('Styles'),
         const=' ',
         help=_("Valid when your output format is \"ass\"/\"ssa\". "
                "Path to the subtitles file "
@@ -118,11 +129,12 @@ def get_cmd_parser():  # pylint: disable=too-many-statements
                "it will use the styles from the : "
                "\"-er\"/\"--external-speech-regions\". "
                "More info on \"-sn\"/\"--styles-name\". "
-               "(arg_num = 0 or 1)"))
+               "(arg_num = 0 or 1)"),
+        gooey_options={'visible': cli_mode})
 
     input_group.add_argument(
         '-sn', '--style-name',
-        nargs='*', metavar=_('style_name'),
+        nargs='*', metavar=_('Style Name'),
         help=_("Valid when your output format is \"ass\"/\"ssa\" "
                "and \"-sty\"/\"--styles\" is given. "
                "Adds \"ass\"/\"ssa\" styles to your events. "
@@ -132,11 +144,14 @@ def get_cmd_parser():  # pylint: disable=too-many-statements
                "specific style from the arg of \"-sty\"/\"--styles\". "
                "If the arg_num is 2, src language events use the first. "
                "Dst language events use the second. "
-               "(arg_num = 1 or 2)"))
+               "(arg_num = 1 or 2)"),
+        gooey_options={'visible': cli_mode})
 
     lang_group.add_argument(
         '-S', '--speech-language',
-        metavar=_('lang_code'),
+        widget='FilterableDropdown',
+        metavar=_('Speech Langauge'),
+        choices=constants.SPEECH_TO_TEXT_LANGUAGE_CODES.keys(),
         help=_("Lang code/Lang tag for speech-to-text. "
                "Recommend using the Google Cloud Speech reference "
                "lang codes. "
@@ -147,21 +162,23 @@ def get_cmd_parser():  # pylint: disable=too-many-statements
 
     lang_group.add_argument(
         '-SRC', '--src-language',
-        metavar=_('lang_code'),
+        metavar=_('Source Langauge'),
         default='auto',
         help=_("Lang code/Lang tag for translation source language. "
                "If not given, use py-googletrans to auto-detect the src language. "
-               "(arg_num = 1) (default: %(default)s)"))
+               "(arg_num = 1) (default: %(default)s)"),
+        gooey_options={'visible': cli_mode})
 
     lang_group.add_argument(
         '-D', '--dst-language',
-        metavar=_('lang_code'),
+        metavar=_('Destination Language'),
         help=_("Lang code/Lang tag for translation destination language. "
-               "(arg_num = 1) (default: %(default)s)"))
+               "(arg_num = 1) (default: %(default)s)"),
+        gooey_options={'visible': cli_mode})
 
     lang_group.add_argument(
         '-bm', '--best-match',
-        metavar=_('mode'),
+        metavar=_('Best Match'),
         nargs="*",
         help=_("Use langcodes to get a best matching lang code "
                "when your input is wrong. "
@@ -172,11 +189,12 @@ def get_cmd_parser():  # pylint: disable=too-many-statements
                "\"s\" for \"-S\"/\"--speech-language\". "
                "\"src\" for \"-SRC\"/\"--src-language\". "
                "\"d\" for \"-D\"/\"--dst-language\". "
-               "(3 >= arg_num >= 1)"))
+               "(3 >= arg_num >= 1)"),
+        gooey_options={'visible': cli_mode})
 
     lang_group.add_argument(
         '-mns', '--min-score',
-        metavar='integer',
+        metavar='Minimum Score',
         type=int,
         help=_("An integer between 0 and 100 "
                "to control the good match group of "
@@ -185,18 +203,19 @@ def get_cmd_parser():  # pylint: disable=too-many-statements
                "or the match result in \"-bm\"/\"--best-match\". "
                "Result will be a group of \"good match\" "
                "whose score is above this arg. "
-               "(arg_num = 1)"))
+               "(arg_num = 1)"),
+        gooey_options={'visible': cli_mode})
 
     output_group.add_argument(
         '-o', '--output',
-        metavar=_('path'),
+        metavar=_('Output Path'),
         help=_("The output path for subtitles file. "
                "(default: the \"input\" path combined "
                "with the proper name tails) (arg_num = 1)"))
 
     output_group.add_argument(
         '-F', '--format',
-        metavar=_('format'),
+        metavar=_('Format'),
         help=_("Destination subtitles format. "
                "If not provided, use the extension "
                "in the \"-o\"/\"--output\" arg. "
@@ -205,17 +224,20 @@ def get_cmd_parser():  # pylint: disable=too-many-statements
                "In this case, if \"-i\"/\"--input\" arg is a subtitles file, "
                "use the same extension from the subtitles file. "
                "(arg_num = 1) (default: {dft})").format(
-                   dft=constants.DEFAULT_SUBTITLES_FORMAT))
+                   dft=constants.DEFAULT_SUBTITLES_FORMAT),
+        gooey_options={'visible': cli_mode})
 
     output_group.add_argument(
         '-y', '--yes',
         action='store_true',
         help=_("Prevent pauses and allow files to be overwritten. "
-               "Stop the program when your args are wrong. (arg_num = 0)"))
+               "Stop the program when your args are wrong. (arg_num = 0)"),
+        gooey_options={'visible': cli_mode})
 
     output_group.add_argument(
         '-of', '--output-files',
-        metavar=_('type'),
+        widget='Listbox',
+        metavar=_('Output Files'),
         nargs='*',
         default=["dst", ],
         help=_("Output more files. "
@@ -233,18 +255,20 @@ def get_cmd_parser():  # pylint: disable=too-many-statements
 
     output_group.add_argument(
         '-fps', '--sub-fps',
-        metavar='float',
+        metavar='Sub FPS',
         type=float,
         help=_("Valid when your output format is \"sub\". "
                "If input, it will override the fps check "
                "on the input file. "
                "Ref: https://pysubs2.readthedocs.io/en/latest/api-reference.html"
                "#supported-input-output-formats "
-               "(arg_num = 1)"))
+               "(arg_num = 1)"),
+        gooey_options={'visible': cli_mode})
 
     speech_group.add_argument(
         '-sapi', '--speech-api',
-        metavar=_('API_code'),
+        widget='FilterableDropdown',
+        metavar=_('Speech API'),
         default='gsv2',
         choices=["gsv2", "gcsv1", "xfyun", "baidu"],
         help=_("Choose which Speech-to-Text API to use. "
@@ -260,7 +284,8 @@ def get_cmd_parser():  # pylint: disable=too-many-statements
 
     speech_group.add_argument(
         '-skey', '--speech-key',
-        metavar='key',
+        widget='PasswordField',
+        metavar='Google Speech API Key',
         help=_("The API key for Google Speech-to-Text API. (arg_num = 1) "
                "Currently support: "
                "gsv2: The API key for gsv2. (default: Free API key) "
@@ -270,7 +295,7 @@ def get_cmd_parser():  # pylint: disable=too-many-statements
 
     speech_group.add_argument(
         '-sconf', '--speech-config',
-        nargs='?', metavar=_('path'),
+        nargs='?', metavar=_('Speech Config'),
         const='config.json',
         help=_("Use Speech-to-Text recognition config file to send request. "
                "Override these options below: "
@@ -289,12 +314,13 @@ def get_cmd_parser():  # pylint: disable=too-many-statements
                "baidu: Baidu Automatic Speech Recognition API "
                "(https://ai.baidu.com/ai-doc/SPEECH/ek38lxj1u). "
                "If arg_num is 0, use const path. "
-               "(arg_num = 0 or 1) (const: %(const)s)")
-    )
+               "(arg_num = 0 or 1) (const: %(const)s)"),
+        gooey_options={'visible': cli_mode})
 
     speech_group.add_argument(
         '-mnc', '--min-confidence',
-        metavar='float',
+        widget='DecimalField',
+        metavar='Minimum Confidence',
         type=float,
         default=0.0,
         help=_("Google Speech-to-Text API response for text confidence. "
@@ -312,168 +338,189 @@ def get_cmd_parser():  # pylint: disable=too-many-statements
 
     speech_group.add_argument(
         '-sc', '--speech-concurrency',
-        metavar='integer',
+        metavar='Speech Concurrency',
         type=int,
         default=constants.DEFAULT_CONCURRENCY,
         help=_("Number of concurrent Speech-to-Text requests to make. "
-               "(arg_num = 1) (default: %(default)s)"))
+               "(arg_num = 1) (default: %(default)s)"),
+        gooey_options={'visible': cli_mode})
 
     trans_group.add_argument(
         '-tapi', '--translation-api',
-        metavar=_('API_code'),
+        metavar=_('Translation API'),
         default='pygt',
         choices=["pygt", "man"],
         help=_("Choose which translation API to use. "
                "Currently support: "
                "pygt: py-googletrans (https://py-googletrans.readthedocs.io/en/latest/). "
                "man: Manually translate the content by write a txt or docx file and then read it. "
-               "(arg_num = 1) (default: %(default)s)"))
+               "(arg_num = 1) (default: %(default)s)"),
+        gooey_options={'visible': cli_mode})
 
     trans_group.add_argument(
         '-tf', '--translation-format',
-        metavar=_('format'),
+        metavar=_('Format'),
         default='docx',
         choices=["docx", "txt"],
         help=_("Choose which output format for manual translation to use. "
                "Currently support: docx, txt. "
-               "(arg_num = 1) (default: %(default)s)"))
+               "(arg_num = 1) (default: %(default)s)"),
+        gooey_options={'visible': cli_mode})
 
     trans_group.add_argument(
         '-mts', '--max-trans-size',
-        metavar='integer',
+        metavar='Maximum Translation Size',
         type=int,
         default=constants.DEFAULT_SIZE_PER_TRANS,
         help=_("(Experimental)Max size per translation request. "
-               "(arg_num = 1) (default: %(default)s)"))
+               "(arg_num = 1) (default: %(default)s)"),
+        gooey_options={'visible': cli_mode})
 
     trans_group.add_argument(
         '-slp', '--sleep-seconds',
-        metavar=_('second'),
+        metavar=_('Sleep Seconds'),
         type=float,
         default=constants.DEFAULT_SLEEP_SECONDS,
         help=_("(Experimental)Seconds for py-googletrans to sleep "
                "between two translation requests. "
-               "(arg_num = 1) (default: %(default)s)"))
+               "(arg_num = 1) (default: %(default)s)"),
+        gooey_options={'visible': cli_mode})
 
     trans_group.add_argument(
         '-surl', '--service-urls',
-        metavar='URL',
+        metavar='Translation URL',
         default=["translate.google.com"],
         nargs='*',
         help=_("(Experimental)Customize py-googletrans request urls. "
                "Ref: https://py-googletrans.readthedocs.io/en/latest/ "
-               "(arg_num >= 1)"))
+               "(arg_num >= 1)"),
+        gooey_options={'visible': cli_mode})
 
     trans_group.add_argument(
         '-ua', '--user-agent',
-        metavar='User-Agent headers',
+        metavar='User-Agent Headers',
         default=gt_constants.DEFAULT_USER_AGENT,
         help=_("(Experimental)Customize py-googletrans User-Agent headers. "
                "Same docs above. "
-               "(arg_num = 1)"))
+               "(arg_num = 1)"),
+        gooey_options={'visible': cli_mode})
 
     trans_group.add_argument(
         '-doc', '--drop-override-codes',
         action='store_true',
         help=_("Drop any .ass override codes in the text before translation. "
                "Only affect the translation result. "
-               "(arg_num = 0)"))
+               "(arg_num = 0)"),
+        gooey_options={'visible': cli_mode})
 
     trans_group.add_argument(
         '-tdc', '--trans-delete-chars',
-        nargs='?', metavar="chars",
+        nargs='?', metavar='Delete Chars after Translation',
         const="，。！",
         help=_("Replace the specific chars with a space after translation, "
                "and strip the space at the end of each sentence. "
                "Only affect the translation result. "
-               "(arg_num = 0 or 1) (const: %(const)s)"))
+               "(arg_num = 0 or 1) (const: %(const)s)"),
+        gooey_options={'visible': cli_mode})
 
     conversion_group.add_argument(
         '-mjs', '--max-join-size',
-        metavar='integer',
+        metavar='Maximum Join Size',
         type=int,
         default=constants.DEFAULT_MAX_SIZE_PER_EVENT,
         help=_("(Experimental)Max length to join two events. "
-               "(arg_num = 1) (default: %(default)s)"))
+               "(arg_num = 1) (default: %(default)s)"),
+        gooey_options={'visible': cli_mode})
 
     conversion_group.add_argument(
         '-mdt', '--max-delta-time',
-        metavar=_('second'),
+        metavar=_('Maximum Delta Time'),
         type=float,
         default=constants.DEFAULT_CONTINUOUS_SILENCE,
         help=_("(Experimental)Max delta time to join two events. "
-               "(arg_num = 1) (default: %(default)s)"))
+               "(arg_num = 1) (default: %(default)s)"),
+        gooey_options={'visible': cli_mode})
 
     conversion_group.add_argument(
         '-dms', '--delimiters',
-        metavar=_('string'),
+        metavar=_('Delimiters'),
         default=constants.DEFAULT_EVENT_DELIMITERS,
         help=_("(Experimental)Delimiters not to join two events. "
-               "(arg_num = 1) (default: %(default)s)"))
+               "(arg_num = 1) (default: %(default)s)"),
+        gooey_options={'visible': cli_mode})
 
     conversion_group.add_argument(
         '-sw1', '--stop-words-1',
-        metavar=_('words_delimited_by_space'),
+        metavar=_('Stop Words Set 1'),
         help=_("(Experimental)First set of Stop words to split two events. "
-               "(arg_num = 1)"))
+               "(arg_num = 1)"),
+        gooey_options={'visible': cli_mode})
 
     conversion_group.add_argument(
         '-sw2', '--stop-words-2',
-        metavar=_('words_delimited_by_space'),
+        metavar=_('Stop Words Set 2'),
         help=_("(Experimental)Second set of Stop words to split two events. "
-               "(arg_num = 1)"))
+               "(arg_num = 1)"),
+        gooey_options={'visible': cli_mode})
 
     conversion_group.add_argument(
         '-ds', '--dont-split',
         action='store_true',
         help=_("(Experimental)Don't split. Just merge. "
-               "(arg_num = 0)"))
+               "(arg_num = 0)"),
+        gooey_options={'visible': cli_mode})
 
     conversion_group.add_argument(
         '-jctl', '--join-control',
-        metavar=_('string'),
+        metavar=_('Join Control'),
         nargs='*',
         help=_("Control the way to join events when using vtt. "
                "Key tag choice: [\"\\k\", \"\\ko\", \"\\kf\", (None)] (default: None). "
                "Events manual adjustment: [\"man\", \"semi-auto\", \"auto\"] (default: man). "
                "Auto capitalization and full stop: [\"cap\", (None)] (default: None). "
                "Trim regions after processing: [\"trim\", (None)] (default: None). "
-               "(arg_num >= 1)"))
+               "(arg_num >= 1)"),
+        gooey_options={'visible': cli_mode})
 
     network_group.add_argument(
         '-hsa', '--http-speech-api',
         action='store_true',
         help=_("Change the Google Speech V2 API "
                "URL into the http one. "
-               "(arg_num = 0)"))
+               "(arg_num = 0)"),
+        gooey_options={'visible': cli_mode})
 
     network_group.add_argument(
         '-hsp', '--https-proxy',
-        nargs='?', metavar='URL',
+        nargs='?', metavar='HTTPs Proxy URL',
         const='https://127.0.0.1:1080',
         help=_("Add https proxy by setting environment variables. "
                "If arg_num is 0, use const proxy url. "
-               "(arg_num = 0 or 1) (const: %(const)s)"))
+               "(arg_num = 0 or 1) (const: %(const)s)"),
+        gooey_options={'visible': cli_mode})
 
     network_group.add_argument(
         '-hp', '--http-proxy',
-        nargs='?', metavar='URL',
+        nargs='?', metavar='HTTP Proxy URL',
         const='http://127.0.0.1:1080',
         help=_("Add http proxy by setting environment variables. "
                "If arg_num is 0, use const proxy url. "
-               "(arg_num = 0 or 1) (const: %(const)s)"))
+               "(arg_num = 0 or 1) (const: %(const)s)"),
+        gooey_options={'visible': cli_mode})
 
     network_group.add_argument(
         '-pu', '--proxy-username',
-        metavar=_('username'),
+        metavar=_('Proxy Username'),
         help=_("Set proxy username. "
-               "(arg_num = 1)"))
+               "(arg_num = 1)"),
+        gooey_options={'visible': cli_mode})
 
     network_group.add_argument(
         '-pp', '--proxy-password',
-        metavar=_('password'),
+        metavar=_('Proxy Password'),
         help=_("Set proxy password. "
-               "(arg_num = 1)"))
+               "(arg_num = 1)"),
+        gooey_options={'visible': cli_mode})
 
     options_group.add_argument(
         '-h', '--help',
@@ -486,11 +533,13 @@ def get_cmd_parser():  # pylint: disable=too-many-statements
         version='%(prog)s ' + metadata.VERSION
         + ' by ' + metadata.AUTHOR + ' <'
         + metadata.AUTHOR_EMAIL + '>',
-        help=_("Show %(prog)s version and exit. (arg_num = 0)"))
+        help=_("Show %(prog)s version and exit. (arg_num = 0)"),
+        gooey_options={'visible': cli_mode})
 
     options_group.add_argument(
         '-sa', '--service-account',
-        metavar=_('path'),
+        widget='FileChooser',
+        metavar=_('Service Account Path'),
         help=_("Set service account key environment variable. "
                "It should be the file path of the JSON file "
                "that contains your service account credentials. "
@@ -501,7 +550,7 @@ def get_cmd_parser():  # pylint: disable=too-many-statements
 
     audio_prcs_group.add_argument(
         '-ap', '--audio-process',
-        nargs='*', metavar=_('mode'),
+        nargs='*', metavar=_('Audio Process'),
         help=_("Option to control audio process. "
                "If not given the option, "
                "do normal conversion work. "
@@ -521,35 +570,39 @@ def get_cmd_parser():  # pylint: disable=too-many-statements
                "(2 >= arg_num >= 1)").format(
                    dft_1=constants.DEFAULT_AUDIO_PRCS_CMDS[0],
                    dft_2=constants.DEFAULT_AUDIO_PRCS_CMDS[1],
-                   dft_3=constants.DEFAULT_AUDIO_PRCS_CMDS[2]))
+                   dft_3=constants.DEFAULT_AUDIO_PRCS_CMDS[2]),
+        gooey_options={'visible': cli_mode})
 
     audio_prcs_group.add_argument(
         '-k', '--keep',
         action='store_true',
         help=_("Keep audio processing files to the output path. "
-               "(arg_num = 0)"))
+               "(arg_num = 0)"),
+        gooey_options={'visible': cli_mode})
 
     audio_prcs_group.add_argument(
         '-apc', '--audio-process-cmd',
-        nargs='*', metavar=_('command'),
+        nargs='*', metavar=_('Command'),
         help=_("This arg will override the default "
                "audio pre-process command. "
                "Every line of the commands need to be in quotes. "
                "Input file name is {in_}. "
                "Output file name is {out_}. "
-               "(arg_num >= 1)"))
+               "(arg_num >= 1)"),
+        gooey_options={'visible': cli_mode})
 
     audio_prcs_group.add_argument(
         '-ac', '--audio-concurrency',
-        metavar='integer',
+        metavar='Audio Concurrency',
         type=int,
         default=constants.DEFAULT_CONCURRENCY,
         help=_("Number of concurrent ffmpeg audio split process to make. "
-               "(arg_num = 1) (default: %(default)s)"))
+               "(arg_num = 1) (default: %(default)s)"),
+        gooey_options={'visible': cli_mode})
 
     audio_prcs_group.add_argument(
         '-acc', '--audio-conversion-cmd',
-        metavar=_('command'),
+        metavar=_('Conversion Command'),
         default=constants.DEFAULT_AUDIO_CVT_CMD,
         help=_("(Experimental)This arg will override the default "
                "audio conversion command. "
@@ -557,56 +610,64 @@ def get_cmd_parser():  # pylint: disable=too-many-statements
                "meaning you can remove them. "
                "\"{\", \"}\" are required arguments "
                "meaning you can't remove them. "
-               "(arg_num = 1) (default: %(default)s)"))
+               "(arg_num = 1) (default: %(default)s)"),
+        gooey_options={'visible': cli_mode})
 
     audio_prcs_group.add_argument(
         '-asc', '--audio-split-cmd',
-        metavar=_('command'),
+        metavar=_('Split Command'),
         default=constants.DEFAULT_AUDIO_SPLT_CMD,
         help=_("(Experimental)This arg will override the default "
                "audio split command. "
                "Same attention above. "
-               "(arg_num = 1) (default: %(default)s)"))
+               "(arg_num = 1) (default: %(default)s)"),
+        gooey_options={'visible': cli_mode})
 
     audio_prcs_group.add_argument(
         '-asf', '--api-suffix',
-        metavar=_('file_suffix'),
+        metavar=_('File Suffix'),
         default='.flac',
         help=_("(Experimental)This arg will override the default "
                "API audio suffix. "
-               "(arg_num = 1) (default: %(default)s)"))
+               "(arg_num = 1) (default: %(default)s)"),
+        gooey_options={'visible': cli_mode})
 
     audio_prcs_group.add_argument(
         '-asr', '--api-sample-rate',
-        metavar=_('sample_rate'),
+        metavar=_('Sample Rate'),
         type=int,
         default=44100,
         help=_("(Experimental)This arg will override the default "
                "API audio sample rate(Hz). "
-               "(arg_num = 1) (default: %(default)s)"))
+               "(arg_num = 1) (default: %(default)s)"),
+        gooey_options={'visible': cli_mode})
 
     audio_prcs_group.add_argument(
         '-aac', '--api-audio-channel',
-        metavar=_('channel_num'),
+        metavar=_('Number of Channels'),
         type=int,
         default=1,
         help=_("(Experimental)This arg will override the default "
                "API audio channel. "
-               "(arg_num = 1) (default: %(default)s)"))
+               "(arg_num = 1) (default: %(default)s)"),
+        gooey_options={'visible': cli_mode})
 
     auditok_group.add_argument(
         '-et', '--energy-threshold',
-        metavar=_('energy'),
+        widget='Slider',
+        metavar=_('Energy Threshold'),
         type=int,
         default=constants.DEFAULT_ENERGY_THRESHOLD,
         help=_("The energy level which determines the region to be detected. "
                "Ref: https://auditok.readthedocs.io/en/latest/apitutorial.html"
                "#examples-using-real-audio-data "
-               "(arg_num = 1) (default: %(default)s)"))
+               "(arg_num = 1) (default: %(default)s)"),
+        gooey_options={'min': 0, 'max': 100})
 
     auditok_group.add_argument(
         '-mnrs', '--min-region-size',
-        metavar=_('second'),
+        widget='DecimalField',
+        metavar=_('Minimum Region Size'),
         type=float,
         default=constants.DEFAULT_MIN_REGION_SIZE,
         help=_("Minimum region size. "
@@ -615,7 +676,8 @@ def get_cmd_parser():  # pylint: disable=too-many-statements
 
     auditok_group.add_argument(
         '-mxrs', '--max-region-size',
-        metavar=_('second'),
+        widget='DecimalField',
+        metavar=_('Maximum Region Size'),
         type=float,
         default=constants.DEFAULT_MAX_REGION_SIZE,
         help=_("Maximum region size. "
@@ -624,7 +686,8 @@ def get_cmd_parser():  # pylint: disable=too-many-statements
 
     auditok_group.add_argument(
         '-mxcs', '--max-continuous-silence',
-        metavar=_('second'),
+        widget='DecimalField',
+        metavar=_('Maximum Continuous Silence'),
         type=float,
         default=constants.DEFAULT_CONTINUOUS_SILENCE,
         help=_("Maximum length of a tolerated silence within a valid audio activity. "
@@ -647,10 +710,11 @@ def get_cmd_parser():  # pylint: disable=too-many-statements
 
     auditok_group.add_argument(
         '-aconf', '--auditok-config',
-        nargs='?', metavar=_('path'),
+        nargs='?', metavar=_('Auditok Config Path'),
         const='aconfig.json',
         help=_("Auditok options automatic optimization config."
-               "(arg_num = 0 or 1)"))
+               "(arg_num = 0 or 1)"),
+        gooey_options={'visible': cli_mode})
 
     list_group.add_argument(
         '-lf', '--list-formats',
@@ -661,11 +725,12 @@ def get_cmd_parser():  # pylint: disable=too-many-statements
                "You need to offer fps option "
                "when input is an audio file "
                "and output is \"sub\" format. "
-               "(arg_num = 0)"))
+               "(arg_num = 0)"),
+        gooey_options={'visible': cli_mode})
 
     list_group.add_argument(
         '-lsc', '--list-speech-codes',
-        metavar=_('lang_code'),
+        metavar=_('Speech Codes'),
         const=' ',
         nargs='?',
         help=_("List all recommended \"-S\"/\"--speech-language\" "
@@ -677,11 +742,12 @@ def get_cmd_parser():  # pylint: disable=too-many-statements
                "Ref: https://tools.ietf.org/html/bcp47 "
                "https://github.com/LuminosoInsight/langcodes/blob/master/langcodes/__init__.py "
                "lang code example: language-script-region-variant-extension-privateuse "
-               "(arg_num = 0 or 1)"))
+               "(arg_num = 0 or 1)"),
+        gooey_options={'visible': cli_mode})
 
     list_group.add_argument(
         '-ltc', '--list-translation-codes',
-        metavar=_('lang_code'),
+        metavar=_('Translation Codes'),
         const=' ',
         nargs='?',
         help=_("List all available \"-SRC\"/\"--src-language\" "
@@ -689,7 +755,8 @@ def get_cmd_parser():  # pylint: disable=too-many-statements
                "Or else will list a group of \"good match\" "
                "of the arg. "
                "Same docs above. "
-               "(arg_num = 0 or 1)"))
+               "(arg_num = 0 or 1)"),
+        gooey_options={'visible': cli_mode})
 
     list_group.add_argument(
         '-dsl', '--detect-sub-language',
@@ -698,6 +765,7 @@ def get_cmd_parser():  # pylint: disable=too-many-statements
                "And list a group of matched language in recommended "
                "\"-S\"/\"--speech-language\" Google Speech-to-Text language codes. "
                "Ref: https://cloud.google.com/speech-to-text/docs/languages "
-               "(arg_num = 1) (default: %(default)s)"))
+               "(arg_num = 1) (default: %(default)s)"),
+        gooey_options={'visible': cli_mode})
 
     return parser

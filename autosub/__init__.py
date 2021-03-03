@@ -36,13 +36,14 @@ def main():  # pylint: disable=too-many-branches, too-many-statements, too-many-
 
     # todo1: move into constants to support locale and dependency input
     option_parser = options.get_cmd_parser()
-    if len(sys.argv) > 1:
-        args = option_parser.parse_args()
-    else:
-        option_parser.print_help()
-        new_argv = input(_("\nInput args(without \"autosub\"): "))
-        args = option_parser.parse_args(shlex.split(new_argv))
-        is_pause = True
+    #if len(sys.argv) > 1:
+    #    args = option_parser.parse_args()
+    #else:
+    #    option_parser.print_help()
+    #    new_argv = input(_("\nInput args(without \"autosub\"): "))
+    #    args = option_parser.parse_args(shlex.split(new_argv))
+    #    is_pause = True
+    args = option_parser.parse_args()
 
     if args.https_proxy:
         os.environ['https_proxy'] = args.https_proxy
