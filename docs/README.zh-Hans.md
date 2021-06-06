@@ -1,6 +1,6 @@
 # Autosub
 
-<escape><a href="https://travis-ci.org/BingLingGroup/autosub"><img src="https://travis-ci.org/BingLingGroup/autosub.svg?branch=alpha"></img></a> <a href="https://app.fossa.io/projects/git%2Bgithub.com%2FBingLingGroup%2Fautosub"><img src="https://app.fossa.io/api/projects/git%2Bgithub.com%2FBingLingGroup%2Fautosub.svg?type=shield"></img></a></escape>
+<escape><a href="https://travis-ci.org/BingLingGroup/autosub"><img src="https://travis-ci.org/BingLingGroup/autosub.svg?branch=alpha"></img></a> <a href="https://www.gnu.org/licenses/gpl-2.0"><img src="https://img.shields.io/badge/license-GPL--2.0-orange.svg"></img></a></escape>
 
 [English](../README.md)
 
@@ -72,8 +72,6 @@ Autosub是一个字幕自动生成工具。它能使用Auditok来自动检测语
 这个仓库和[原仓库](https://github.com/agermanidis/autosub)的证书不一样。
 
 [GPLv2](../LICENSE)
-
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FBingLingGroup%2Fautosub.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FBingLingGroup%2Fautosub)
 
 ### 依赖
 

@@ -324,7 +324,7 @@ def gsv2_to_text(  # pylint: disable=too-many-locals,too-many-arguments,too-many
 
         if error == AttributeError:
             print(
-                _("Error: Connection error happened too many times.\nAll works done."))
+                _("Error: Connection error happened too many times.\nAll work done."))
 
         return None
 
@@ -467,7 +467,7 @@ def gcsv1_to_text(  # pylint: disable=too-many-locals,too-many-arguments,too-man
 
         if error == AttributeError:
             print(
-                _("Error: Connection error happened too many times.\nAll works done."))
+                _("Error: Connection error happened too many times.\nAll work done."))
 
         return None
 
@@ -571,7 +571,7 @@ def xfyun_to_text(  # pylint: disable=too-many-locals, too-many-arguments,
 
         if error == AttributeError:
             print(
-                _("Error: Connection error happened too many times.\nAll works done."))
+                _("Error: Connection error happened too many times.\nAll work done."))
 
         return None
 
@@ -682,7 +682,7 @@ def baidu_to_text(  # pylint: disable=too-many-locals, too-many-arguments,
 
         if error == AttributeError:
             print(
-                _("Error: Connection error happened too many times.\nAll works done."))
+                _("Error: Connection error happened too many times.\nAll work done."))
 
         return None
 

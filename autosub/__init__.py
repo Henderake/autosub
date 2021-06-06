@@ -11,6 +11,7 @@ import shlex
 
 # Import third-party modules
 import pysubs2
+import auditok
 
 # Any changes to the path and your own modules
 from autosub import ffmpeg_utils
@@ -57,6 +58,12 @@ def main():  # pylint: disable=too-many-branches, too-many-statements, too-many-
     if args.proxy_password:
         os.environ['proxy_password'] = args.proxy_password
 
+    if not args.auditok_mode:
+        if not args.not_strict_min_length:
+            args.auditok_mode = auditok.StreamTokenizer.STRICT_MIN_LENGTH
+        if args.drop_trailing_silence:
+            args.auditok_mode = args.auditok_mode | auditok.StreamTokenizer.DROP_TRAILING_SILENCE
+
     try:
         if args.speech_config:
             cmdline_utils.validate_speech_config(args)
@@ -65,7 +72,7 @@ def main():  # pylint: disable=too-many-branches, too-many-statements, too-many-
             args.auditok_config = cmdline_utils.validate_json_config(args.auditok_config)
 
         if cmdline_utils.list_args(args):
-            raise exceptions.AutosubException(_("\nAll works done."))
+            raise exceptions.AutosubException(_("\nAll work done."))
 
         if not args.yes:
             input_m = input
@@ -109,7 +116,7 @@ def main():  # pylint: disable=too-many-branches, too-many-statements, too-many-
 
                     args.input = prcs_file
                     raise exceptions.AutosubException(
-                        _("Audio pre-processing complete.\nAll works done."))
+                        _("Audio pre-processing complete.\nAll work done."))
 
                 if 's' in args.audio_process:
                     args.keep = True
@@ -185,13 +192,20 @@ def main():  # pylint: disable=too-many-branches, too-many-statements, too-many-
                         "[sample_rate]",
                         "{sample_rate}".format(sample_rate=args.api_sample_rate))
 
-                cmdline_utils.sub_conversion(
-                    args,
-                    input_m=input_m,
-                    fps=fps
-                )
+                if args.join_control:
+                    cmdline_utils.sub_processing(
+                        args,
+                        input_m=input_m,
+                        fps=fps
+                    )
+                else:
+                    cmdline_utils.sub_conversion(
+                        args,
+                        input_m=input_m,
+                        fps=fps
+                    )
 
-        raise exceptions.AutosubException(_("\nAll works done."))
+        raise exceptions.AutosubException(_("\nAll work done."))
 
     except KeyboardInterrupt:
         print(_("\nKeyboardInterrupt. Works stopped."))
@@ -202,4 +216,8 @@ def main():  # pylint: disable=too-many-branches, too-many-statements, too-many-
 
     if is_pause:
         input(_("Press Enter to exit..."))
+
+    if constants.IS_UNIX:
+        os.system('stty sane')
+
     return 0

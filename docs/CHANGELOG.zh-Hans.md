@@ -62,16 +62,19 @@
 - 添加了send2trash，在某些情况下替代了os.remove。
 - 添加字词检查在man_get_vtt_words_index。
 - 添加速度限制在trim在join-events中。
-- 添加split_dst_lf_src_assfile方法来分离同行双语字幕。
+- 添加方法split_dst_lf_src_assfile来分离同行双语字幕。
 - 添加当前工作路径文件名重命名支持。
 - 添加youtube自动字幕json格式行合并功能。
 - 添加googletrans v4.0.0rc1支持在类ManualTranslator中。
+- 添加更多的字幕格式支持在方法sub_processing中，以方便分割及合并字幕行。
+- 添加去除首尾空格的功能在类YTBWebVTT的类方法from_json_file中。
 
 #### 改动(未发布)
 
 - 修改`-et`默认参数为50。
 - 修改方法audio_or_video_prcs的控制流程，使用args.output_files来控制。
 - 修改ci为github actions，由[@jitingcn](https://github.com/jitingcn)完成。
+- 重构sub_conversion方法。
 
 #### 修复(未发布)
 
@@ -85,6 +88,11 @@
 - 修复使用-der选项时输出双语字幕的越界问题，由[@jitingcn](https://github.com/jitingcn)完成。
 - 修复Auditok v0.1.8+兼容性问题。
 - 修复style_name问题在方法split_dst_lf_src_assfile中。
+- 修复运行完程序后，终端无法输入的问题，由[@9mido](https://github.com/9mido)完成。
+- 修复args.ext_regions为None时对其操作的错误，在方法sub_processing中。
+- 修复vtt_sub为None时对其成员访问的错误，在方法sub_processing中。
+
+<escape><a href = "#目录">&nbsp;↑&nbsp;</a></escape>
 
 ### [0.5.7-alpha] - 2020-05-06
 
@@ -95,8 +103,8 @@
 - 添加字符过滤器用于讯飞开放平台语音听写。
 - 添加delete_chars功能到方法list_to_googletrans里。
 - 添加方法merge_src_assfile，merge_bilingual_assfile。
-- 添加停用词用于merge_src_assfile方法里的断句。
-- 添加标点符号分割功能在merge_src_assfile方法里。
+- 添加停用词用于方法merge_src_assfile里的断句。
+- 添加标点符号分割功能在方法merge_src_assfile里。
 - 添加音频长度至少为4字节的检测，在SplitIntoAudioPiece里。
 - 添加源语言自动识别功能，当不输入`-SRC`选项时。
 

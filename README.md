@@ -1,6 +1,6 @@
 # Autosub
 
-<escape><a href="https://travis-ci.org/BingLingGroup/autosub"><img src="https://travis-ci.org/BingLingGroup/autosub.svg?branch=alpha"></img></a> <a href="https://app.fossa.io/projects/git%2Bgithub.com%2FBingLingGroup%2Fautosub"><img src="https://app.fossa.io/api/projects/git%2Bgithub.com%2FBingLingGroup%2Fautosub.svg?type=shield"></img></a></escape>
+<escape><a href="https://travis-ci.org/BingLingGroup/autosub"><img src="https://travis-ci.org/BingLingGroup/autosub.svg?branch=alpha"></img></a> <a href="https://www.gnu.org/licenses/gpl-2.0"><img src="https://img.shields.io/badge/license-GPL--2.0-orange.svg"></img></a></escape>
 
 [简体中文](docs/README.zh-Hans.md)
 
@@ -72,8 +72,6 @@ The new features mentioned above are only available in the latest alpha branch. 
 This repo has a different license from [the original repo](https://github.com/agermanidis/autosub).
 
 [GPLv2](LICENSE)
-
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FBingLingGroup%2Fautosub.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FBingLingGroup%2Fautosub)
 
 ### Dependencies
 

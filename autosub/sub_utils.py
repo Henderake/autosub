@@ -111,6 +111,16 @@ class VTTWord:  # pylint: disable=too-few-public-methods
             char_per_sec = 10
         self.duration = len(self.word) * 1000 // char_per_sec
 
+    def __repr__(self):
+        """
+        Compute the string representation of a class of VTTWord.
+        """
+        vttword_repr = "<YTBWebVTT start={start} end={end} word='{word}'>".format(
+            start=pysubs2.time.ms_to_str(self.start),
+            end=pysubs2.time.ms_to_str(self.end),
+            word=self.word)
+        return vttword_repr
+
 
 def split_vtt_word(vtt_word):
     """
@@ -124,7 +134,7 @@ def split_vtt_word(vtt_word):
         if end == 0:
             vtt_word.speed = 10
         for sub_word in word_list[:-1]:
-            temp = int(len(sub_word) / vtt_word.speed * 1000)
+            temp = int(len(sub_word) / vtt_word.speed * 1000) + start
             vtt_word_list.append(VTTWord(start=start, end=temp, word=sub_word))
             start = temp
         vtt_word_list.append(VTTWord(start=start, end=end, word=word_list[-1]))
@@ -193,11 +203,13 @@ class YTBWebVTT:  # pylint: disable=too-many-nested-blocks, too-many-branches, t
         self.vtt_words = []
         self.vtt_words_index = []
         self.path = ""
+        self.styles = None
+        self.info = None
 
     @classmethod
-    def from_file(cls,
-                  path,
-                  encoding="utf-8"):
+    def from_vtt_file(cls,
+                      path,
+                      encoding="utf-8"):
         """
         Get youtube WebVTT from a file.
         """
@@ -243,7 +255,7 @@ class YTBWebVTT:  # pylint: disable=too-many-nested-blocks, too-many-branches, t
                                     else:
                                         end = 0
                                     subs.vtt_words.extend(split_vtt_word(VTTWord(
-                                        word=word.lstrip().rstrip(), start=start, end=end)))
+                                        word=word, start=start, end=end)))
                                     j = j + 1
                                     word = ""
                                 continue
@@ -294,15 +306,30 @@ class YTBWebVTT:  # pylint: disable=too-many-nested-blocks, too-many-branches, t
                     event_start_ms = event["tStartMs"]
                     event_end_ms = event["dDurationMs"] + event_start_ms
                     subs.vtt_words.extend(split_vtt_word(VTTWord(
-                        word=segs[0]["utf8"].lstrip().rstrip(),
-                        start=event_start_ms, end=0)))
+                        word=segs[0]["utf8"].lstrip().rstrip(), start=event_start_ms, end=0)))
                     for seg in segs[1:]:
                         start_ms = seg["tOffsetMs"] + event_start_ms
                         subs.vtt_words[-1].end = start_ms
                         subs.vtt_words.extend(split_vtt_word(VTTWord(
-                            word=seg["utf8"].lstrip().rstrip(),
-                            start=start_ms, end=0)))
+                            word=seg["utf8"].lstrip().rstrip(), start=start_ms, end=0)))
                     subs.vtt_words[-1].end = event_end_ms
+        return subs
+
+    @classmethod
+    def from_pysubs2_file(cls,
+                          path,
+                          encoding="utf-8"):
+        """
+        Get youtube WebVTT from a pysubs2 supported file(estimated times).
+        """
+        subs = cls()
+        subs.path = path
+        src_sub = pysubs2.SSAFile.load(path, encoding=encoding)
+        subs.styles = src_sub.styles
+        subs.info = src_sub.info
+        for event in src_sub.events:
+            subs.vtt_words.extend(split_vtt_word(VTTWord(
+                word=event.text, start=event.start, end=event.end)))
         return subs
 
     def text_to_ass_events(self,

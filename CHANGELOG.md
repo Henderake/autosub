@@ -68,12 +68,15 @@ Click up arrow to go back to TOC.
 - Add current working directory support in file renaming.
 - Add join-events support for youtube automatic caption in json format.
 - Add support for googletrans v4.0.0rc1 in class ManualTranslator.
+- Add more subtitles format support in method sub_processing to join and split the events of the subtitles.
+- Add leading and trailing whitespace stripping in class method from_json_file in class YTBWebVTT.
 
 #### Changed(Unreleased)
 
 - Change the default value for `-et` option into 50.
 - Change the control flow in method audio_or_video_prcs by using args.output_files to control.
 - Change ci to github actions by [@jitingcn](https://github.com/jitingcn).
+- Refactor method sub_conversion.
 
 #### Fixed(Unreleased)
 
@@ -87,6 +90,11 @@ Click up arrow to go back to TOC.
 - Fix out of range when output bilingual subtitles with -der option by [@jitingcn](https://github.com/jitingcn).
 - Fix Auditok v0.1.8+ compatibility issue.
 - Fix style_name issue in method split_dst_lf_src_assfile.
+- Fix unable to type into the terminal after running by [@9mido](https://github.com/9mido).
+- Fix to avoid splitext on args.ext_regions when it's None in method sub_processing.
+- Fix to avoid access on vtt_sub class members when it's None in method sub_processing.
+
+<escape><a href = "#TOC">&nbsp;↑&nbsp;</a></escape>
 
 ### [0.5.7-alpha] - 2020-05-06
 
