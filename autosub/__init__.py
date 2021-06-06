@@ -58,7 +58,7 @@ def main():  # pylint: disable=too-many-branches, too-many-statements, too-many-
     if args.proxy_password:
         os.environ['proxy_password'] = args.proxy_password
 
-    if not args.auditok_mode:
+    if 'auditok_mode' not in args or not args.auditok_mode:
         if not args.not_strict_min_length:
             args.auditok_mode = auditok.StreamTokenizer.STRICT_MIN_LENGTH
         if args.drop_trailing_silence:
