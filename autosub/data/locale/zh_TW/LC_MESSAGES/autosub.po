@@ -1,0 +1,100 @@
+# autosub __init__.py translation file.
+# Copyright (C) 2019 BingLingFanSub
+# This file is distributed under the same license as the PACKAGE package.
+# BingLingFanSub <binglingfansub@gmail.com>, 2019.
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-06-09 22:08-0700\n"
+"PO-Revision-Date: 2020-04-05 13:21+0800\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.3\n"
+
+#: autosub/__init__.py:75 autosub/__init__.py:208
+#, fuzzy
+msgid ""
+"\n"
+"All work done."
+msgstr ""
+"\n"
+"做完了。"
+
+#: autosub/__init__.py:88
+msgid "Error: Dependency ffmpeg not found on this machine."
+msgstr "錯誤：依賴ffmpeg未在這臺電腦上找到。"
+
+#: autosub/__init__.py:92
+msgid "Error: Dependency ffprobe not found on this machine."
+msgstr "錯誤：依賴ffprobe未在這臺電腦上找到。"
+
+#: autosub/__init__.py:103
+msgid ""
+"Error: The args of \"-ap\"/\"--audio-process\" are wrong.\n"
+"No works done."
+msgstr ""
+"錯誤：\"-ap\"/\"--audio-process\"的參數有誤。\n"
+"啥都沒做。"
+
+#: autosub/__init__.py:115
+msgid "No works done."
+msgstr "啥都沒做。"
+
+#: autosub/__init__.py:119
+#, fuzzy
+msgid ""
+"Audio pre-processing complete.\n"
+"All work done."
+msgstr ""
+"音頻預處理已完成。\n"
+"做完了。"
+
+#: autosub/__init__.py:135
+msgid "Audio pre-processing failed. Try default method."
+msgstr ""
+"音頻預處理失敗。\n"
+"使用默認方法。"
+
+#: autosub/__init__.py:138
+msgid "Audio pre-processing complete."
+msgstr "音頻預處理已完成。"
+
+#: autosub/__init__.py:180
+msgid "Error: No valid \"-of\"/\"--output-files\" arguments."
+msgstr "錯誤：\"-of\"/\"--output-files\"參數無效。"
+
+#: autosub/__init__.py:211
+msgid ""
+"\n"
+"KeyboardInterrupt. Works stopped."
+msgstr ""
+"\n"
+"鍵盤中斷。操作終止。"
+
+#: autosub/__init__.py:213
+msgid ""
+"\n"
+"Error: pysubs2.exceptions. Check your file format."
+msgstr ""
+"\n"
+"錯誤：pysubs2異常。檢查你的文件格式。"
+
+#: autosub/__init__.py:218
+msgid "Press Enter to exit..."
+msgstr "按回車以退出..."
+
+#~ msgid ""
+#~ "\n"
+#~ "Input args(without \"autosub\"): "
+#~ msgstr ""
+#~ "\n"
+#~ "輸入參數(不包含\"autosub\"): "
+
+#~ msgid "No extra check/conversion before the speech-to-text procedure."
+#~ msgstr "在語音轉文字之前不會有多餘的檢查/格式轉換。"

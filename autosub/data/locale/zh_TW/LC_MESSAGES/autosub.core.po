@@ -1,0 +1,173 @@
+# autosub core.py translation file.
+# Copyright (C) 2019 BingLingFanSub
+# This file is distributed under the same license as the PACKAGE package.
+# BingLingFanSub <binglingfansub@gmail.com>, 2019.
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-06-09 22:08-0700\n"
+"PO-Revision-Date: 2020-03-21 15:41+0800\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.3\n"
+
+#: autosub/core.py:76
+msgid "Auditok options optimization: "
+msgstr ""
+
+#: autosub/core.py:109
+#, python-brace-format
+msgid ""
+"Best options for Auditok is:\n"
+"mxcs = {mxcs}s\n"
+"et = {et}"
+msgstr ""
+
+#: autosub/core.py:141
+msgid "Trimming events: "
+msgstr ""
+
+#: autosub/core.py:238
+msgid ""
+"\n"
+"Converting speech regions to short-term fragments."
+msgstr ""
+"\n"
+"按照語音區域將音頻轉換爲多個短語音片段。"
+
+#: autosub/core.py:239
+msgid "Converting: "
+msgstr "轉換中： "
+
+#: autosub/core.py:285
+msgid ""
+"\n"
+"Sending short-term fragments to Google Speech V2 API and getting result."
+msgstr ""
+"\n"
+"將短片段語音發送給Google Speech V2 API並得到識別結果。"
+
+#: autosub/core.py:286 autosub/core.py:355 autosub/core.py:513
+#: autosub/core.py:637
+msgid "Speech-to-Text: "
+msgstr "語音轉文字中： "
+
+#: autosub/core.py:327 autosub/core.py:470 autosub/core.py:574
+#: autosub/core.py:685
+#, fuzzy
+msgid ""
+"Error: Connection error happened too many times.\n"
+"All work done."
+msgstr ""
+"錯誤：過多連接錯誤。\n"
+"做完了。"
+
+#: autosub/core.py:353
+msgid ""
+"\n"
+"Sending short-term fragments to Google Cloud Speech V1P1Beta1 API and "
+"getting result."
+msgstr ""
+"\n"
+"將短片段語音發送給Google Cloud Speech V1P1Beta1 API並得到識別結果。"
+
+#: autosub/core.py:478 autosub/core.py:585 autosub/core.py:693
+msgid "Receive something unexpected:"
+msgstr "收到未預期數據："
+
+#: autosub/core.py:511
+msgid ""
+"\n"
+"Sending short-term fragments to Xun Fei Yun WebSocket API and getting result."
+msgstr ""
+"\n"
+"將短片段語音發送給訊飛雲WebSocket API並得到識別結果。"
+
+#: autosub/core.py:609
+msgid ""
+"\n"
+"Sending short-term fragments to Baidu PRO ASR API and getting result."
+msgstr ""
+"\n"
+"將短片段語音發送給百度短語音識別極速版API並得到識別結果。"
+
+#: autosub/core.py:612
+msgid ""
+"\n"
+"Sending short-term fragments to Baidu ASR API and getting result."
+msgstr ""
+"\n"
+"將短片段語音發送給百度短語音識別API並得到識別結果。"
+
+#: autosub/core.py:623
+msgid "Get the token online."
+msgstr "在線獲取token。"
+
+#: autosub/core.py:628
+msgid "Use the token from the config."
+msgstr "使用配置文件中的token。"
+
+#: autosub/core.py:631
+msgid "Failed to get the token. Error message:"
+msgstr "無法獲取token。錯誤信息："
+
+#: autosub/core.py:776
+#, python-brace-format
+msgid ""
+"\n"
+"Translating text from \"{0}\" to \"{1}\"."
+msgstr ""
+"\n"
+"從\"{0}\"翻譯爲\"{1}\"。"
+
+#: autosub/core.py:780
+msgid "Translation: "
+msgstr "翻譯中： "
+
+#: autosub/core.py:846
+msgid "Cancelling translation."
+msgstr "取消翻譯。"
+
+#: autosub/core.py:906 autosub/core.py:930
+msgid "Wait for the manual translation. Press Enter to continue."
+msgstr ""
+
+#: autosub/core.py:909 autosub/core.py:933
+msgid "Wait 20 seconds for the manual translation. "
+msgstr ""
+
+#: autosub/core.py:910 autosub/core.py:934
+#, fuzzy
+msgid "Manual translation: "
+msgstr "翻譯中： "
+
+#: autosub/core.py:1019 autosub/core.py:1077
+#, python-brace-format
+msgid "Format \"{fmt}\" not supported. Use \"{default_fmt}\" instead."
+msgstr "不支持格式\"{fmt}\"。改用\"{default_fmt}\"。"
+
+#~ msgid ""
+#~ "There is already a file with the same name in this location: "
+#~ "\"{dest_name}\"."
+#~ msgstr "在此處已有同名文件：\"{dest_name}\"。"
+
+#~ msgid ""
+#~ "Input a new path (including directory and file name) for output file.\n"
+#~ msgstr "爲輸出文件輸入一個新的路徑（包括路徑和文件名）。\n"
+
+#, fuzzy
+#~ msgid "Cancelling transcription."
+#~ msgstr "取消翻譯。"
+
+#~ msgid ""
+#~ "\n"
+#~ "Translating text from {0} to {1}."
+#~ msgstr ""
+#~ "\n"
+#~ "從{0}翻譯爲{1}。"

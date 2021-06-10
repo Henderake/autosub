@@ -1,0 +1,89 @@
+# autosub ffmpeg_utils.py translation file.
+# Copyright (C) 2019 BingLingFanSub
+# This file is distributed under the same license as the PACKAGE package.
+# BingLingFanSub <binglingfansub@gmail.com>, 2019.
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-06-09 22:08-0700\n"
+"PO-Revision-Date: 2020-04-05 13:23+0800\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.3\n"
+
+#: autosub/ffmpeg_utils.py:98
+msgid ""
+"Error: ffmpeg can't split your file. Check your audio processing options."
+msgstr "錯誤：ffmpeg無法分割你的文件。檢查一下你的音頻處理選項。"
+
+#: autosub/ffmpeg_utils.py:129
+msgid ""
+"ffprobe can't get video fps.\n"
+"It is necessary when output is \".sub\"."
+msgstr ""
+"ffprobe無法獲取到視頻的幀率。\n"
+"當輸出格式是\".sub\"時，需要獲取幀率。"
+
+#: autosub/ffmpeg_utils.py:132
+msgid ""
+"Input your video fps. Any illegal input will regard as \".srt\" instead.\n"
+msgstr "輸入你視頻的幀率。任何非法的值會被當作\".srt\"格式處理。\n"
+
+#: autosub/ffmpeg_utils.py:139
+msgid "Use \".srt\" instead."
+msgstr "改用\".srt\"格式。"
+
+#: autosub/ffmpeg_utils.py:152
+msgid ""
+"\n"
+"Use ffprobe to check conversion result."
+msgstr ""
+"\n"
+"使用ffprobe來檢查轉換結果。"
+
+#: autosub/ffmpeg_utils.py:185
+msgid ""
+"Warning: Dependency ffmpeg-normalize not found on this machine. Try default "
+"method."
+msgstr ""
+"警告：依賴ffmpeg-normalize未在這臺電腦上找到。嘗試默認的方法去轉換格式。"
+
+#: autosub/ffmpeg_utils.py:197
+#, python-brace-format
+msgid ""
+"There is already a file with the same name in this location: \"{dest_name}\"."
+msgstr "在此處已有同名文件：\"{dest_name}\"。"
+
+#: autosub/ffmpeg_utils.py:200
+msgid "Input a new path (including directory and file name) for output file.\n"
+msgstr "爲輸出文件輸入一個新的路徑（包括路徑和文件名）。\n"
+
+#~ msgid ""
+#~ "Error: ffmpeg failed to convert the file.\n"
+#~ "Below is the error output.\n"
+#~ msgstr ""
+#~ "錯誤：ffmpeg無法轉碼文件。\n"
+#~ "以下是錯誤輸出。\n"
+
+#~ msgid ""
+#~ "Error: ffprobe failed to get fps.\n"
+#~ "Below is the error output."
+#~ msgstr ""
+#~ "錯誤：ffprobe無法得到fps。\n"
+#~ "\v以下是錯誤輸出。"
+
+#~ msgid ""
+#~ "Error: ffprobe failed to check the file.\n"
+#~ "Below is the error output."
+#~ msgstr ""
+#~ "錯誤：ffprobe無法檢查文件。\n"
+#~ "以下是錯誤輸出。"
+
+#~ msgid "Audio pre-processing failed. Try default method."
+#~ msgstr "音頻預處理失敗。嘗試默認的方法去轉換格式。"

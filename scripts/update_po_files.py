@@ -14,7 +14,8 @@ def run_cmd(cmd):
     cmd_prcs = subprocess.Popen(
         cmd,
         stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE)
+        stderr=subprocess.PIPE,
+        shell=True)
     while True:
         line_ = cmd_prcs.stdout.readline()
         if not line_:
