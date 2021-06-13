@@ -1286,7 +1286,6 @@ def get_fps(
 
     return fps
 
-
 def convert_wav(
         input_,
         conversion_cmd,
@@ -1315,7 +1314,8 @@ def convert_wav(
     print(command)
     prcs = subprocess.Popen(constants.cmd_conversion(command),
                             stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE)
+                            stderr=subprocess.PIPE,
+                            startupinfo=ffmpeg_utils.get_startup_info())
     out, err = prcs.communicate()
     if out:
         print(out.decode(sys.stdout.encoding))

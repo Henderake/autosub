@@ -25,6 +25,16 @@ FFMPEG_UTILS_TEXT = gettext.translation(domain=__name__,
 
 _ = FFMPEG_UTILS_TEXT.gettext
 
+# Set STARTF_USESHOWWINDOW in Windows to hide the console windows when launching a subprocess
+# https://code.activestate.com/recipes/409002-launching-a-subprocess-without-a-console-window/
+def get_startup_info():
+    if not subprocess._mswindows:
+        return None
+
+    startup_info = subprocess.STARTUPINFO()
+    startup_info.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+
+    return startup_info
 
 class SplitIntoAudioPiece:  # pylint: disable=too-few-public-methods
     """
@@ -64,7 +74,8 @@ class SplitIntoAudioPiece:  # pylint: disable=too-few-public-methods
                                           out_=temp.name)
                 prcs = subprocess.Popen(constants.cmd_conversion(command),
                                         stdout=subprocess.PIPE,
-                                        stderr=subprocess.PIPE)
+                                        stderr=subprocess.PIPE,
+                                        startupinfo=get_startup_info())
                 prcs.communicate()
                 return temp.name
 
@@ -79,7 +90,8 @@ class SplitIntoAudioPiece:  # pylint: disable=too-few-public-methods
                                       out_=filename)
             prcs = subprocess.Popen(constants.cmd_conversion(command),
                                     stdout=subprocess.PIPE,
-                                    stderr=subprocess.PIPE)
+                                    stderr=subprocess.PIPE,
+                                    startupinfo=get_startup_info())
             err = prcs.communicate()[1]
             if err:
                 return None
@@ -110,7 +122,8 @@ def ffprobe_get_fps(  # pylint: disable=superfluous-parens
         print(command)
         prcs = subprocess.Popen(constants.cmd_conversion(command),
                                 stdout=subprocess.PIPE,
-                                stderr=subprocess.PIPE)
+                                stderr=subprocess.PIPE,
+                                startupinfo=get_startup_info())
         out, err = prcs.communicate()
         if out:
             ffprobe_str = out.decode(sys.stdout.encoding)
@@ -154,7 +167,8 @@ def ffprobe_check_file(filename):
     print(command)
     prcs = subprocess.Popen(constants.cmd_conversion(command),
                             stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE)
+                            stderr=subprocess.PIPE,
+                            startupinfo=get_startup_info())
     out, err = prcs.communicate()
     if out:
         ffprobe_str = out.decode(sys.stdout.encoding)
@@ -212,7 +226,8 @@ def audio_pre_prcs(  # pylint: disable=too-many-arguments, too-many-branches
             print(command)
             subprocess.check_output(
                 constants.cmd_conversion(command),
-                stdin=open(os.devnull))
+                stdin=open(os.devnull),
+                startupinfo=get_startup_info())
             if not ffprobe_check_file(output_list[i]):
                 return None
 
@@ -230,7 +245,8 @@ def audio_pre_prcs(  # pylint: disable=too-many-arguments, too-many-branches
             print(command)
             subprocess.check_output(
                 constants.cmd_conversion(command),
-                stdin=open(os.devnull))
+                stdin=open(os.devnull),
+                startupinfo=get_startup_info())
             if not ffprobe_check_file(output_list[i]):
                 os.remove(output_list[i])
                 return None
