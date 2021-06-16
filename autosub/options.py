@@ -36,12 +36,17 @@ M_ = META_TEXT.gettext
     program_name=f'{metadata.NAME} {metadata.VERSION}',
     tabbed_groups=True,
     default_size=(800, 600),
-    disable_progress_bar_animation=True,
+    language=_('english'),
 )
 def get_cmd_parser():  # pylint: disable=too-many-statements
     """
     Get command-line parser.
     """
+
+    if hasattr(sys.stdout, 'reconfigure'):
+        sys.stdout.reconfigure(encoding='utf-8')
+    if hasattr(sys.stderr, 'reconfigure'):
+        sys.stderr.reconfigure(encoding='utf-8')
 
     cli_mode = IGNORE_COMMAND in sys.argv
     def add_argument(group, *args, **kwargs):

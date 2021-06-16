@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-09 22:08-0700\n"
+"POT-Creation-Date: 2021-06-16 16:01-0700\n"
 "PO-Revision-Date: 2020-05-06 15:52+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -467,7 +467,7 @@ msgstr "雙語字幕創建在了\"{}\"。"
 msgid "Destination language subtitles file created at \"{}\"."
 msgstr "目的語言字幕文件創建在了\"{}\"。"
 
-#: autosub/cmdline_utils.py:1312
+#: autosub/cmdline_utils.py:1311
 #, python-brace-format
 msgid ""
 "\n"
