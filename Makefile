@@ -8,4 +8,4 @@ clean:
 	rm -r build dist
 
 build-executable:
-	pyinstaller -F --noconsole build.spec
+	pyinstaller build.spec

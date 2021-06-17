@@ -29,7 +29,8 @@ except ImportError:
 
 SUPPORTED_LOCALE = {
     "en_US",
-    "zh_CN"
+    "zh_CN",
+    "zh_TW"
 }
 # Ref: https://www.gnu.org/software/gettext/manual/html_node/Locale-Names.html#Locale-Names
 
