@@ -35,7 +35,7 @@ exe = EXE(pyz,
           strip=None,
           upx=True,
           console=False,
-          icon=os.path.join(gooey_root, 'images', 'program_icon.ico'))
+          icon="docs/icon/autosub.ico")
 
 locale_data = [('data', 'autosub/data', 'DATA')]
 coll = COLLECT(exe, locale_data, name='autosub')
